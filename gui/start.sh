@@ -1,82 +1,67 @@
 #!/data/data/com.termux/files/usr/bin/bash
-set -e
 
-if [ -z "${PREFIX:-}" ] || [ ! -d "$PREFIX" ]; then
-    echo "Please start PY-OS from the main Termux app, not inside PRoot."
-    exit 1
-fi
+set -Ee
 
 cd "$(dirname "$0")"
 
+export DISPLAY=:0
+
 if ! command -v termux-x11 >/dev/null 2>&1; then
-    echo "Termux:X11 companion package is missing."
-    echo "Install it in main Termux with: pkg install x11-repo termux-x11-nightly"
+    echo "Install termux-x11-nightly first."
     exit 1
 fi
 
-if [ ! -f pyos.py ]; then
-    echo "Could not find pyos.py in this folder."
-    exit 1
-fi
-
-DISPLAY_SOCKET="${TMPDIR:-$PREFIX/tmp}/.X11-unix/X0"
 X11_PID=""
 GUI_PID=""
 STARTED_X11=0
 
 cleanup() {
-    status=$?
     trap - EXIT INT TERM TSTP
 
-    # Stop the PY-OS app if it is still running.
     if [ -n "$GUI_PID" ]; then
         kill "$GUI_PID" 2>/dev/null || true
         wait "$GUI_PID" 2>/dev/null || true
     fi
 
-    # Only stop the Termux:X11 process started by this launcher.
-    # If display :0 was already running, leave it untouched.
     if [ "$STARTED_X11" -eq 1 ] && [ -n "$X11_PID" ]; then
         kill "$X11_PID" 2>/dev/null || true
         wait "$X11_PID" 2>/dev/null || true
     fi
-
-    exit "$status"
 }
 
 trap cleanup EXIT
 trap 'exit 130' INT
 trap 'exit 143' TERM
-# Ctrl+Z should leave PY-OS cleanly instead of suspending a half-running desktop.
 trap 'exit 148' TSTP
 
-if [ ! -S "$DISPLAY_SOCKET" ]; then
+if ! xdpyinfo -display :0 >/dev/null 2>&1; then
     echo "Starting Termux:X11 on display :0..."
     termux-x11 :0 &
     X11_PID=$!
     STARTED_X11=1
 
-    count=0
-    while [ "$count" -lt 50 ] && [ ! -S "$DISPLAY_SOCKET" ]; do
-        sleep 0.2
-        count=$((count + 1))
+    am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity >/dev/null 2>&1 || true
+
+    echo "Waiting for X11..."
+
+    READY=0
+    for i in $(seq 1 60); do
+        if xdpyinfo -display :0 >/dev/null 2>&1; then
+            READY=1
+            break
+        fi
+        sleep 1
     done
 
-    if [ ! -S "$DISPLAY_SOCKET" ]; then
-        echo "Termux:X11 did not create the display socket:"
-        echo "$DISPLAY_SOCKET"
-        echo "Open the Termux:X11 Android app and try again."
+    if [ "$READY" -ne 1 ]; then
+        echo "ERROR: Termux:X11 did not become ready."
         exit 1
     fi
 fi
 
-# Bring the Termux:X11 Android activity to the foreground.
-if command -v am >/dev/null 2>&1; then
-    am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity >/dev/null 2>&1 || true
-fi
-
-export DISPLAY=:0
+echo "X11 is ready!"
 echo "Starting PY-OS desktop..."
+
 python pyos.py &
 GUI_PID=$!
 wait "$GUI_PID"
