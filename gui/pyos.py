@@ -2,6 +2,11 @@
 """PY-OS native desktop app for Linux: Tkinter windows on X11/XWayland."""
 import ast, json, operator, platform, shutil, subprocess, tkinter as tk, os, shlex, posixpath, re, pty, fcntl, termios, struct, select, errno
 from datetime import datetime
+import signal
+
+# Ctrl+Z should not suspend the Tk desktop and leave its X11 session half-alive.
+if hasattr(signal, "SIGTSTP"):
+    signal.signal(signal.SIGTSTP, signal.SIG_IGN)
 from pathlib import Path
 from tkinter import ttk, messagebox
 
