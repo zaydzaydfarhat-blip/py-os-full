@@ -163,6 +163,12 @@ class PyOS(tk.Tk):
         w=self.windows.get(key)
         if w and w.winfo_exists(): w.deiconify(); w.lift(); w.focus_force(); return w
         w=tk.Toplevel(self); w.title(title+" — PY-OS"); w.geometry(size); w.minsize(280,200); w.configure(bg=PANEL)
+        # Center each new app window on the available screen.
+        w.update_idletasks()
+        sw, sh = w.winfo_screenwidth(), w.winfo_screenheight()
+        ww, wh = w.winfo_width(), w.winfo_height()
+        x, y = max(0, (sw - ww) // 2), max(0, (sh - wh) // 2)
+        w.geometry(f"+{x}+{y}")
         self.windows[key]=w
         task_btn=tk.Button(self.task_buttons,text=title,command=lambda win=w:self.toggle_window(win),
             bg=PANEL2,fg=FG,activebackground="#344761",activeforeground=FG,
