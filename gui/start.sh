@@ -19,6 +19,7 @@ if [ ! -f pyos.py ]; then
     exit 1
 fi
 
+DISPLAY_SOCKET="${TMPDIR:-$PREFIX/tmp}/.X11-unix/X0"
 X11_PID=""
 STARTED_X11=0
 
@@ -26,7 +27,7 @@ cleanup() {
     status=$?
     trap - EXIT INT TERM
 
-    # Only stop the X11 process if this launcher started it.
+    # Never stop a server that was already running before PY-OS started.
     if [ "$STARTED_X11" -eq 1 ] && [ -n "$X11_PID" ]; then
         kill "$X11_PID" 2>/dev/null || true
         wait "$X11_PID" 2>/dev/null || true
@@ -39,18 +40,33 @@ trap cleanup EXIT
 trap 'exit 130' INT
 trap 'exit 143' TERM
 
-if pgrep -x termux-x11 >/dev/null 2>&1; then
-    echo "Termux:X11 is already running; reusing display :0."
+if [ -S "$DISPLAY_SOCKET" ]; then
+    echo "Display :0 socket already exists; reusing Termux:X11."
 else
     echo "Starting Termux:X11 on display :0..."
     termux-x11 :0 &
     X11_PID=$!
     STARTED_X11=1
+
+    count=0
+    while [ "$count" -lt 50 ] && [ ! -S "$DISPLAY_SOCKET" ]; do
+        sleep 0.2
+        count=$((count + 1))
+    done
+
+    if [ ! -S "$DISPLAY_SOCKET" ]; then
+        echo "Termux:X11 did not create the display socket:"
+        echo "$DISPLAY_SOCKET"
+        echo "Open the Termux:X11 Android app and try again."
+        exit 1
+    fi
+fi
+
+# Bring the Termux:X11 Android activity to the foreground when available.
+if command -v am >/dev/null 2>&1; then
+    am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity >/dev/null 2>&1 || true
 fi
 
 export DISPLAY=:0
-echo "Waiting briefly for Termux:X11..."
-sleep 2
-
 echo "Starting PY-OS desktop..."
 python pyos.py
