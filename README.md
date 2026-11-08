@@ -43,6 +43,8 @@ git pull
 - Desktop wallpaper, app shortcuts, clock, and Start menu.
 - Welcome, Calculator, Notes, System Info, and Games apps.
 - Games includes Chess (two-player with legal moves), Snake, Tic-Tac-Toe, 2048, Minesweeper, and Pong.
+- The Games list scrolls when the window is too small to show every game.
+- In any game, press `R` or choose **Restart** to start over; press `Q` or choose **Quit** to close that game.
 - Games run locally in PY-OS windows; no browser or internet connection is needed after setup.
 - App windows open centered on the screen.
 - Move windows by dragging their title bars.
