@@ -67,6 +67,14 @@ bash tests/xfce-window-test.sh 10
 
 This test requires an active graphical session and `xfce4-terminal`. Close the test windows normally when finished.
 
+For a continuous test, run:
+
+```bash
+bash tests/xfce-window-test-loop.sh
+```
+
+It opens another window every 2 seconds, but never tracks more than 12 open test windows at once. Close windows to let it continue opening replacements. Press **Ctrl+C** in the launching terminal to stop the loop; already-open test windows stay open.
+
 ## Notes
 
 - Run `bash setup.sh` from the cloned project folder in the main Termux app.
