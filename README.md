@@ -13,7 +13,7 @@ cd py-os-full
 bash setup.sh
 ```
 
-For the graphical desktop, also install the **Termux:X11 Android app**. Then run `py-os-gui` from the main Termux app. The launcher starts the X11 server on display `:0` only when it is not already running.
+For the graphical desktop, install the **Termux:X11 Android app** and the Termux `termux-x11-nightly` package. Run `py-os-gui` from the main Termux app: it starts `termux-x11 :0` when needed, opens the Android X11 activity, and then launches the PY-OS desktop.
 
 ## Commands
 
@@ -79,8 +79,8 @@ It opens another window every 2 seconds, but never tracks more than 12 open test
 
 - Run `bash setup.sh` from the cloned project folder in the main Termux app.
 - If you move the project folder, run `bash setup.sh` again to refresh the command paths.
-- The GUI requires the Termux:X11 Android app. Open that app if the desktop does not appear.
-- Use the desktop's **Leave** button or Ctrl+C to exit. The launcher only stops the X11 server process it started; if an X11 server was already running, PY-OS leaves it running.
+- The GUI requires the Termux:X11 Android app. The `py-os-gui` launcher attempts to open its activity automatically.
+- Use the desktop's **Leave** button, Ctrl+C, or Ctrl+Z to exit. The launcher cleans up the GUI and only stops the X11 server process it started; if an X11 server was already running, PY-OS leaves it running.
 - The optional BusyBox terminal simulator in the CLI uses BusyBox if installed.
 
 ## Credits
