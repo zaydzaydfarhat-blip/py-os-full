@@ -34,7 +34,7 @@ cleanup() {
 trap cleanup EXIT
 trap 'exit 130' INT
 trap 'exit 143' TERM
-trap 'exit 148' TSTP
+trap 'echo "Ctrl+Z received; closing PY-OS cleanly..."; exit 0' TSTP
 
 if ! xdpyinfo -display :0 >/dev/null 2>&1; then
     echo "Starting Termux:X11 on display :0..."
