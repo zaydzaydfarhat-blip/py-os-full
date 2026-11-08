@@ -12,7 +12,7 @@ BIN_DIR="$PREFIX/bin"
 echo "Installing PY-OS Full requirements..."
 pkg update -y
 pkg install -y x11-repo
-pkg install -y git python python-tkinter termux-x11-nightly procps busybox
+pkg install -y git python python-tkinter termux-x11-nightly xorg-xdpyinfo procps busybox
 
 mkdir -p "$BIN_DIR"
 printf -v PROJECT_PATH_Q '%q' "$PROJECT_DIR"
