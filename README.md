@@ -20,17 +20,18 @@ For the graphical desktop, install and open the **Termux:X11 Android app**. Then
 | Command | Action |
 | --- | --- |
 | `py-os` | Start the arrow-key terminal interface |
-| `py-os-update` | Update PY-OS Full from GitHub |
+| `py-os-update` | Update the combined project |
 | `py-os-gui` | Start the Tkinter graphical desktop |
-| `py-os-gui-update` | Update PY-OS Full from GitHub |
+| `py-os-gui-update` | Update the combined project |
+| `py-os-full-update` | Update the entire PY-OS Full repository |
 
-Both update commands update the same combined repository.
+All three update commands pull the latest version of the same combined repository.
 
 ## What's included
 
 - `cli/` — original terminal launcher, interactive TUI, and classic shell.
 - `gui/` — original Tkinter desktop, Termux:X11 start script, and web demo files.
-- `setup.sh` — installs dependencies and all four command launchers into Termux's `$PREFIX/bin`.
+- `setup.sh` — installs dependencies and all five command launchers into Termux's `$PREFIX/bin`.
 
 The terminal interface and desktop remain separate programs; you can run either one.
 
