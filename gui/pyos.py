@@ -62,6 +62,16 @@ class PyOS(tk.Tk):
         tk.Label(top,text="PY-OS",bg="#111b2b",fg=ACCENT,font=("Sans",14,"bold")).pack(side="left",padx=14,pady=9)
         self.time=tk.Label(top,bg="#111b2b",fg=MUTED); self.time.pack(side="right",padx=14)
 
+        bar=tk.Frame(self,bg="#111b2b"); bar.pack(fill="x",side="bottom")
+        tk.Button(bar,text="⊞ Start",command=self.launcher,bg=ACCENT,fg="#08231c",relief="flat",
+                  font=("Sans",10,"bold"),padx=16).pack(side="left",padx=10,pady=7)
+        self.task_buttons=tk.Frame(bar,bg="#111b2b")
+        self.task_buttons.pack(side="left",fill="x",expand=True,padx=6)
+        tk.Label(bar,text="Native Linux desktop",bg="#111b2b",fg=MUTED).pack(side="right",padx=12)
+        tk.Button(bar,text="↩ Leave",command=self.leave_desktop,bg="#a8324a",fg="#ffffff",
+                  activebackground="#d0445d",activeforeground="#ffffff",relief="flat",
+                  font=("Sans",10,"bold"),padx=12).pack(side="right",padx=8,pady=6)
+
         # Full-screen illustrated neon-night wallpaper, drawn at any window size.
         self.desktop_canvas=tk.Canvas(self,bg="#080f36",highlightthickness=0)
         self.desktop_canvas.pack(fill="both",expand=True)
@@ -84,15 +94,7 @@ class PyOS(tk.Tk):
                 font=("Sans",10),cursor="hand2").grid(row=i//2,column=i%2,padx=5,pady=5,sticky="nsew")
         self.desktop_canvas.create_window(24,135,anchor="nw",window=grid)
 
-        bar=tk.Frame(self,bg="#111b2b"); bar.pack(fill="x",side="bottom")
-        tk.Button(bar,text="⊞ Start",command=self.launcher,bg=ACCENT,fg="#08231c",relief="flat",
-                  font=("Sans",10,"bold"),padx=16).pack(side="left",padx=10,pady=7)
-        self.task_buttons=tk.Frame(bar,bg="#111b2b")
-        self.task_buttons.pack(side="left",fill="x",expand=True,padx=6)
-        tk.Label(bar,text="Native Linux desktop",bg="#111b2b",fg=MUTED).pack(side="right",padx=12)
-        tk.Button(bar,text="↩ Leave",command=self.leave_desktop,bg="#a8324a",fg="#ffffff",
-                  activebackground="#d0445d",activeforeground="#ffffff",relief="flat",
-                  font=("Sans",10,"bold"),padx=12).pack(side="right",padx=8,pady=6)
+
 
     def leave_desktop(self):
         """Close the desktop; gui/start.sh cleans up the X11 server it started."""
