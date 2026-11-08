@@ -28,7 +28,8 @@ cd "\$PROJECT_DIR/cli"
 exec python main.py "\$@"
 EOF
 
-cat > "$BIN_DIR/py-os-update" <<EOF
+for command_name in py-os-update py-os-gui-update py-os-full-update; do
+    cat > "$BIN_DIR/$command_name" <<EOF
 #!/data/data/com.termux/files/usr/bin/bash
 PROJECT_DIR=$PROJECT_PATH_Q
 if [ ! -d "\$PROJECT_DIR/.git" ]; then
@@ -38,6 +39,7 @@ fi
 cd "\$PROJECT_DIR"
 git pull --ff-only
 EOF
+done
 
 cat > "$BIN_DIR/py-os-gui" <<EOF
 #!/data/data/com.termux/files/usr/bin/bash
@@ -49,26 +51,17 @@ fi
 exec bash "\$PROJECT_DIR/gui/start.sh" "\$@"
 EOF
 
-cat > "$BIN_DIR/py-os-gui-update" <<EOF
-#!/data/data/com.termux/files/usr/bin/bash
-PROJECT_DIR=$PROJECT_PATH_Q
-if [ ! -d "\$PROJECT_DIR/.git" ]; then
-    echo "PY-OS Full Git folder not found: \$PROJECT_DIR"
-    exit 1
-fi
-cd "\$PROJECT_DIR"
-git pull --ff-only
-EOF
-
 chmod +x "$BIN_DIR/py-os" "$BIN_DIR/py-os-update" \
-    "$BIN_DIR/py-os-gui" "$BIN_DIR/py-os-gui-update"
+    "$BIN_DIR/py-os-gui" "$BIN_DIR/py-os-gui-update" \
+    "$BIN_DIR/py-os-full-update"
 
 echo
 echo "PY-OS Full setup complete!"
 echo "Commands installed:"
-echo "  py-os             - start the terminal interface"
-echo "  py-os-update      - update the combined project"
-echo "  py-os-gui         - start the graphical desktop"
-echo "  py-os-gui-update  - update the combined project"
+echo "  py-os               - start the terminal interface"
+echo "  py-os-update        - update the combined project"
+echo "  py-os-gui            - start the graphical desktop"
+echo "  py-os-gui-update     - update the combined project"
+echo "  py-os-full-update    - update the entire PY-OS Full project"
 echo
 echo "For the desktop, open the Termux:X11 Android app first."
