@@ -77,7 +77,7 @@ class Games:
             return
         w = self.win("chess", "Chess", "560x620")
         if not w: return
-        self.game_controls(w, lambda: (w.destroy(), w.after(50, self.chess)))
+        self.game_controls(w, lambda: (w.destroy(), self.os.after(50, self.chess)))
         board = chess.Board()
         selected = [None]
         status = tk.Label(w, bg=PANEL, fg=FG, font=("Sans", 11, "bold"))
@@ -128,7 +128,7 @@ class Games:
     def snake(self):
         w = self.win("snake", "Snake", "480x540")
         if not w: return
-        self.game_controls(w, lambda: (w.destroy(), w.after(50, self.snake)))
+        self.game_controls(w, lambda: (w.destroy(), self.os.after(50, self.snake)))
         score = tk.Label(w, text="Score: 0", bg=PANEL, fg=FG, font=("Sans", 12, "bold")); score.pack(pady=5)
         c = tk.Canvas(w, width=400, height=400, bg="#0b1422", highlightthickness=0); c.pack(padx=10,pady=6)
         cell, cols, rows = 20, 20, 20
@@ -159,7 +159,7 @@ class Games:
     def tictactoe(self):
         w = self.win("tictactoe", "Tic-Tac-Toe", "360x430")
         if not w: return
-        self.game_controls(w, lambda: (w.destroy(), w.after(50, self.tictactoe)))
+        self.game_controls(w, lambda: (w.destroy(), self.os.after(50, self.tictactoe)))
         board=[""]*9; turn=["X"]; buttons=[]
         status=tk.Label(w,text="X's turn",bg=PANEL,fg=FG,font=("Sans",14,"bold"));status.pack(pady=12)
         grid=tk.Frame(w,bg=PANEL);grid.pack(expand=True)
@@ -185,7 +185,7 @@ class Games:
     def game2048(self):
         w=self.win("2048","2048","390x480")
         if not w:return
-        self.game_controls(w, lambda: (w.destroy(), w.after(50, self.game2048)))
+        self.game_controls(w, lambda: (w.destroy(), self.os.after(50, self.game2048)))
         board=[[0]*4 for _ in range(4)];score=[0]
         label=tk.Label(w,text="Score: 0",bg=PANEL,fg=FG,font=("Sans",14,"bold"));label.pack(pady=8)
         grid=tk.Frame(w,bg="#344761",padx=5,pady=5);grid.pack(padx=10,pady=8)
@@ -234,7 +234,7 @@ class Games:
     def minesweeper(self):
         w=self.win("minesweeper","Minesweeper","430x500")
         if not w:return
-        self.game_controls(w, lambda: (w.destroy(), w.after(50, self.minesweeper)))
+        self.game_controls(w, lambda: (w.destroy(), self.os.after(50, self.minesweeper)))
         n=9;mines=set(random.sample(range(n*n),10));opened=set();flags=set();buttons=[]
         status=tk.Label(w,text="Find the 10 hidden mines",bg=PANEL,fg=FG);status.pack(pady=8)
         grid=tk.Frame(w,bg=PANEL);grid.pack(padx=8,pady=8)
@@ -264,7 +264,7 @@ class Games:
     def pong(self):
         w=self.win("pong","Pong","560x430")
         if not w:return
-        self.game_controls(w, lambda: (w.destroy(), w.after(50, self.pong)))
+        self.game_controls(w, lambda: (w.destroy(), self.os.after(50, self.pong)))
         c=tk.Canvas(w,width=520,height=320,bg="#081321",highlightthickness=0);c.pack(padx=10,pady=8)
         score=[0,0];paddle=[130];ball=[260,160,3,2];running=[True]
         label=tk.Label(w,text="You 0  —  0 CPU",bg=PANEL,fg=FG,font=("Sans",13,"bold"));label.pack()
