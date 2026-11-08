@@ -13,7 +13,7 @@ cd py-os-full
 bash setup.sh
 ```
 
-For the graphical desktop, install and open the **Termux:X11 Android app**. Then return to Termux.
+For the graphical desktop, install the **Termux:X11 Android app**. Then run `py-os-gui` from the main Termux app; the launcher starts the Termux:X11 server on display `:0` if it is not already running.
 
 ## Commands
 
@@ -21,7 +21,7 @@ For the graphical desktop, install and open the **Termux:X11 Android app**. Then
 | --- | --- |
 | `py-os` | Start the arrow-key terminal interface |
 | `py-os-update` | Update the Cli project |
-| `py-os-gui` | Start the Tkinter graphical desktop |
+| `py-os-gui` | Start Termux:X11 on display `:0` (if needed), then start the desktop |
 | `py-os-gui-update` | Update the Gui project |
 | `py-os-full-update` | Update the entire PY-OS Full repository |
 
@@ -39,7 +39,7 @@ The terminal interface and desktop remain separate programs; you can run either 
 
 - Run setup from the cloned project folder in the main Termux app.
 - If you move the project folder, run `bash setup.sh` again to refresh the command paths.
-- The desktop requires Termux:X11. The CLI interface runs in a terminal.
+- The desktop requires the Termux:X11 Android app to be installed. `py-os-gui` starts the X11 server on display `:0` when needed. Use the desktop's **Leave** button, Ctrl+C, or Ctrl+Z to exit; the launcher stops only the X11 server process it started. If an X11 server was already running, PY-OS leaves it running.
 - The optional BusyBox terminal simulator in the TUI uses BusyBox if installed.
 
 ## Credits
