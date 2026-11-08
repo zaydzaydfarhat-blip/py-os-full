@@ -273,6 +273,10 @@ class PyOS(tk.Tk):
         tk.Label(w,text=sub,bg=PANEL,fg=MUTED,wraplength=650,justify="left").pack(anchor="w",padx=15,pady=(0,10))
 
     def open_app(self,name):
+        if name=="Games":
+            from games import Games
+            Games(self).hub()
+            return
         key=name.lower().replace(" ","-")
         sizes={"Welcome":"600x390","Calculator":"340x450","Notes":"600x440","System info":"540x380","Games":"460x540"}
         w=self.window(key,name,sizes.get(name,"580x400"))
@@ -285,9 +289,6 @@ class PyOS(tk.Tk):
         elif name=="Calculator": self.calculator(w)
         elif name=="Notes": self.notes_app(w)
         elif name=="System info": self.system(w)
-        elif name=="Games":
-            from games import Games
-            Games(self).hub()
         w.lift()
 
     def launcher(self):
