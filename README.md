@@ -13,7 +13,7 @@ cd py-os-full
 bash setup.sh
 ```
 
-For the graphical desktop, install the **Termux:X11 Android app** and the Termux `termux-x11-nightly` package. Run `py-os-gui` from the main Termux app: it starts `termux-x11 :0` when needed, opens the Android X11 activity, and then launches the PY-OS desktop.
+For the graphical desktop, install the **Termux:X11 Android app** and run `bash setup.sh` from the main Termux app. Setup installs `termux-x11-nightly`, `xorg-xdpyinfo`, Python, and Tkinter. Run `py-os-gui`: it reuses display `:0` if already running, otherwise starts Termux:X11, opens its Android activity, and launches the original PY-OS desktop. **No Openbox, XFCE, or other desktop environment is required.**
 
 ## Commands
 
