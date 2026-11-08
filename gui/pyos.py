@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """PY-OS native desktop app for Linux: Tkinter windows on X11/XWayland."""
-import ast, json, operator, platform, shutil, subprocess, tkinter as tk, os, shlex, posixpath, re, pty, fcntl, termios, struct, select, errno, signal
+import ast, json, operator, platform, shutil, subprocess, tkinter as tk, os, shlex, posixpath, re, pty, fcntl, termios, struct, select, errno
 from datetime import datetime
 from pathlib import Path
 from tkinter import ttk, messagebox
@@ -85,37 +85,16 @@ class PyOS(tk.Tk):
         self.task_buttons=tk.Frame(bar,bg="#111b2b")
         self.task_buttons.pack(side="left",fill="x",expand=True,padx=6)
         tk.Label(bar,text="Native Linux desktop",bg="#111b2b",fg=MUTED).pack(side="right",padx=12)
-        tk.Button(bar,text="■ Stop",command=self.stop_desktop,bg="#a8324a",fg="#ffffff",
+        tk.Button(bar,text="↩ Leave",command=self.leave_desktop,bg="#a8324a",fg="#ffffff",
                   activebackground="#d0445d",activeforeground="#ffffff",relief="flat",
                   font=("Sans",10,"bold"),padx=12).pack(side="right",padx=8,pady=6)
 
-    def stop_desktop(self):
-        """Close PY-OS and stop the Termux:X11 server process started by Termux."""
-        # Close the Tk windows first while the display is still available.
+    def leave_desktop(self):
+        """Close the desktop; gui/start.sh cleans up the X11 server it started."""
         try:
             self.destroy()
         except tk.TclError:
             pass
-
-        # Only signal a process with the exact Termux:X11 server name that
-        # belongs to this same Android/Termux user. Never use a broad pkill.
-        proc = Path("/proc")
-        try:
-            entries = list(proc.iterdir())
-        except OSError:
-            return
-        own_uid = os.getuid()
-        for entry in entries:
-            if not entry.name.isdigit():
-                continue
-            try:
-                if entry.stat().st_uid != own_uid:
-                    continue
-                process_name = (entry / "comm").read_text(encoding="utf-8").strip()
-                if process_name == "termux-x11":
-                    os.kill(int(entry.name), signal.SIGTERM)
-            except (OSError, ProcessLookupError, PermissionError, ValueError):
-                continue
 
     def draw_wallpaper(self,event=None):
         canvas=getattr(self,"desktop_canvas",None)
