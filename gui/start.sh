@@ -40,8 +40,7 @@ trap cleanup EXIT
 trap 'exit 130' INT
 trap 'exit 143' TERM
 
-if [ -S "$DISPLAY_SOCKET" ]; then
-else
+if [ ! -S "$DISPLAY_SOCKET" ]; then
     echo "Starting Termux:X11 on display :0..."
     termux-x11 :0 &
     X11_PID=$!
