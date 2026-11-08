@@ -21,13 +21,21 @@ fi
 
 DISPLAY_SOCKET="${TMPDIR:-$PREFIX/tmp}/.X11-unix/X0"
 X11_PID=""
+GUI_PID=""
 STARTED_X11=0
 
 cleanup() {
     status=$?
-    trap - EXIT INT TERM
+    trap - EXIT INT TERM TSTP
 
-    # Never stop a server that was already running before PY-OS started.
+    # Stop the PY-OS app if it is still running.
+    if [ -n "$GUI_PID" ]; then
+        kill "$GUI_PID" 2>/dev/null || true
+        wait "$GUI_PID" 2>/dev/null || true
+    fi
+
+    # Only stop the Termux:X11 process started by this launcher.
+    # If display :0 was already running, leave it untouched.
     if [ "$STARTED_X11" -eq 1 ] && [ -n "$X11_PID" ]; then
         kill "$X11_PID" 2>/dev/null || true
         wait "$X11_PID" 2>/dev/null || true
@@ -39,6 +47,8 @@ cleanup() {
 trap cleanup EXIT
 trap 'exit 130' INT
 trap 'exit 143' TERM
+# Ctrl+Z should leave PY-OS cleanly instead of suspending a half-running desktop.
+trap 'exit 148' TSTP
 
 if [ ! -S "$DISPLAY_SOCKET" ]; then
     echo "Starting Termux:X11 on display :0..."
@@ -60,11 +70,13 @@ if [ ! -S "$DISPLAY_SOCKET" ]; then
     fi
 fi
 
-# Bring the Termux:X11 Android activity to the foreground when available.
+# Bring the Termux:X11 Android activity to the foreground.
 if command -v am >/dev/null 2>&1; then
     am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity >/dev/null 2>&1 || true
 fi
 
 export DISPLAY=:0
 echo "Starting PY-OS desktop..."
-python pyos.py
+python pyos.py &
+GUI_PID=$!
+wait "$GUI_PID"
