@@ -51,6 +51,22 @@ git pull
 
 The CLI and GUI are separate programs, but they are maintained and updated together in this repository.
 
+## XFCE window test
+
+A small test script opens multiple XFCE Terminal windows so you can check how your XFCE desktop handles separate windows:
+
+```bash
+bash tests/xfce-window-test.sh
+```
+
+You can choose the number of windows (1–12); the default is 8:
+
+```bash
+bash tests/xfce-window-test.sh 10
+```
+
+This test requires an active graphical session and `xfce4-terminal`. Close the test windows normally when finished.
+
 ## Notes
 
 - Run `bash setup.sh` from the cloned project folder in the main Termux app.
