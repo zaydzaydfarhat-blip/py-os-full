@@ -77,7 +77,7 @@ class PyOS(tk.Tk):
         self.desktop_canvas.create_window(31,75,anchor="nw",window=tagline)
 
         grid=tk.Frame(self.desktop_canvas,bg="#101a50")
-        apps=[("🏠","Welcome"),("🧮","Calculator"),("📁","Notes"),("⚙","System info")]
+        apps=[("🏠","Welcome"),("🧮","Calculator"),("📁","Notes"),("⚙","System info"),("🎮","Games")]
         for i,(ico,name) in enumerate(apps):
             tk.Button(grid,text=ico+"\n"+name,command=lambda n=name:self.open_app(n),bg="#17265c",fg=FG,
                 activebackground="#344a91",activeforeground=FG,relief="flat",width=12,height=3,
@@ -274,7 +274,7 @@ class PyOS(tk.Tk):
 
     def open_app(self,name):
         key=name.lower().replace(" ","-")
-        sizes={"Welcome":"600x390","Calculator":"340x450","Notes":"600x440","System info":"540x380"}
+        sizes={"Welcome":"600x390","Calculator":"340x450","Notes":"600x440","System info":"540x380","Games":"460x540"}
         w=self.window(key,name,sizes.get(name,"580x400"))
         if getattr(w,"built",False): return
         w.built=True
@@ -285,13 +285,16 @@ class PyOS(tk.Tk):
         elif name=="Calculator": self.calculator(w)
         elif name=="Notes": self.notes_app(w)
         elif name=="System info": self.system(w)
+        elif name=="Games":
+            from games import Games
+            Games(self).hub()
         w.lift()
 
     def launcher(self):
         w=self.window("launcher","PY-OS Start","300x350")
         if getattr(w,"built",False): return
         w.built=True
-        for n in ("Welcome","Calculator","Notes","System info"):
+        for n in ("Welcome","Calculator","Notes","System info","Games"):
             ttk.Button(w,text=n,command=lambda x=n:self.open_app(x)).pack(fill="x",padx=12,pady=5)
 
     def calculator(self,w):
