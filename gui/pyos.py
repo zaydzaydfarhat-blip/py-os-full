@@ -31,7 +31,7 @@ class PyOS(tk.Tk):
         self.configure(cursor="left_ptr")
         self.title("PY-OS")
         self.geometry(f"{self.winfo_screenwidth()}x{self.winfo_screenheight()}+0+0")
-        # PY-OS is the desktop shell; Openbox manages the app windows above it.
+        # PY-OS is a self-contained desktop shell; app windows use PY-OS controls.
         self.overrideredirect(True)
         self.minsize(320, 360)
         self.configure(bg=BG)
@@ -74,7 +74,7 @@ class PyOS(tk.Tk):
         grid=tk.Frame(self.desktop_canvas,bg="#101a50")
         apps=[("🏠","Welcome"),("🧮","Calculator"),("📁","Notes"),("⚙","System info")]
         for i,(ico,name) in enumerate(apps):
-            tk.Button(grid,text=ico+"\\n"+name,command=lambda n=name:self.open_app(n),bg="#17265c",fg=FG,
+            tk.Button(grid,text=ico+"\n"+name,command=lambda n=name:self.open_app(n),bg="#17265c",fg=FG,
                 activebackground="#344a91",activeforeground=FG,relief="flat",width=12,height=3,
                 font=("Sans",10),cursor="hand2").grid(row=i//2,column=i%2,padx=5,pady=5,sticky="nsew")
         self.desktop_canvas.create_window(24,135,anchor="nw",window=grid)
