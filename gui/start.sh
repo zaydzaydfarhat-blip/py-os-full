@@ -5,7 +5,7 @@ set -Ee
 cd "$(dirname "$0")"
 export DISPLAY=:0
 
-for cmd in termux-x11 xdpyinfo openbox python; do
+for cmd in termux-x11 xdpyinfo python; do
     if ! command -v "$cmd" >/dev/null 2>&1; then
         echo "Missing command: $cmd"
         echo "Run bash setup.sh from the PY-OS Full folder, then try again."
@@ -14,7 +14,6 @@ for cmd in termux-x11 xdpyinfo openbox python; do
 done
 
 X11_PID=""
-WM_PID=""
 GUI_PID=""
 STARTED_X11=0
 
@@ -24,11 +23,6 @@ cleanup() {
     if [ -n "$GUI_PID" ]; then
         kill "$GUI_PID" 2>/dev/null || true
         wait "$GUI_PID" 2>/dev/null || true
-    fi
-
-    if [ -n "$WM_PID" ]; then
-        kill "$WM_PID" 2>/dev/null || true
-        wait "$WM_PID" 2>/dev/null || true
     fi
 
     if [ "$STARTED_X11" -eq 1 ] && [ -n "$X11_PID" ]; then
@@ -67,17 +61,7 @@ if ! xdpyinfo -display :0 >/dev/null 2>&1; then
 fi
 
 echo "X11 is ready!"
-echo "Starting Openbox window manager..."
-openbox &
-WM_PID=$!
-sleep 2
-
-if ! kill -0 "$WM_PID" 2>/dev/null; then
-    echo "ERROR: Openbox failed to start."
-    exit 1
-fi
-
-echo "Starting PY-OS desktop..."
+echo "Starting standalone PY-OS desktop..."
 python pyos.py &
 GUI_PID=$!
 wait "$GUI_PID"
