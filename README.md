@@ -20,9 +20,9 @@ For the graphical desktop, install and open the **Termux:X11 Android app**. Then
 | Command | Action |
 | --- | --- |
 | `py-os` | Start the arrow-key terminal interface |
-| `py-os-update` | Update the combined project |
+| `py-os-update` | Update the Cli project |
 | `py-os-gui` | Start the Tkinter graphical desktop |
-| `py-os-gui-update` | Update the combined project |
+| `py-os-gui-update` | Update the Gui project |
 | `py-os-full-update` | Update the entire PY-OS Full repository |
 
 All three update commands pull the latest version of the same combined repository.
