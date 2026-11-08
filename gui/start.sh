@@ -19,21 +19,34 @@ if [ ! -f pyos.py ]; then
     exit 1
 fi
 
-echo "Starting Termux:X11 on display :0..."
-termux-x11 :0 &
-X11_PID=$!
+X11_PID=""
+STARTED_X11=0
 
 cleanup() {
     status=$?
     trap - EXIT INT TERM
-    kill "$X11_PID" 2>/dev/null || true
-    wait "$X11_PID" 2>/dev/null || true
+
+    # Only stop the X11 process if this launcher started it.
+    if [ "$STARTED_X11" -eq 1 ] && [ -n "$X11_PID" ]; then
+        kill "$X11_PID" 2>/dev/null || true
+        wait "$X11_PID" 2>/dev/null || true
+    fi
+
     exit "$status"
 }
 
 trap cleanup EXIT
 trap 'exit 130' INT
 trap 'exit 143' TERM
+
+if pgrep -x termux-x11 >/dev/null 2>&1; then
+    echo "Termux:X11 is already running; reusing display :0."
+else
+    echo "Starting Termux:X11 on display :0..."
+    termux-x11 :0 &
+    X11_PID=$!
+    STARTED_X11=1
+fi
 
 export DISPLAY=:0
 echo "Waiting briefly for Termux:X11..."
